@@ -1,12 +1,12 @@
 resource "google_compute_instance" "gcespark" {
-  name = "rds-tactics-proxy"
-  machine_type = "n1-highcpu-8"
+  name = "cristi-spark-gce"
+  machine_type = "n1-standard-1"
   zone = "europe-west1-b"
 
   boot_disk {
     initialize_params {
       image = "${google_compute_image.nixos_1809.self_link}"
-      size = 5
+      size = 10
     }
   }
 
@@ -18,13 +18,13 @@ resource "google_compute_instance" "gcespark" {
   }
 
   metadata = {
-    sshKeys = "root:${tls_private_key.gcespark.public_key_openssh}" 
+    sshKeys = "root:${tls_private_key.root_key.public_key_openssh}" 
   }
 
   connection {
     user        = "root"
     host        = "${self.network_interface.0.access_config.0.nat_ip}"
-    private_key = "${tls_private_key.gcespark.private_key_pem}"
+    private_key = "${tls_private_key.root_key.private_key_pem}"
   }
 
   provisioner "remote-exec" {
@@ -55,7 +55,7 @@ resource "null_resource" "gcespark_deploy" {
   connection {
     user        = "root"
     host        = "${local.instance_ip}"
-    private_key = "${tls_private_key.gcespark.private_key_pem}"
+    private_key = "${tls_private_key.root_key.private_key_pem}"
   }
 
   provisioner "file" {
@@ -71,7 +71,7 @@ resource "null_resource" "gcespark_deploy" {
   provisioner "remote-exec" {
     inline = [
       "nixos-rebuild switch --show-trace",
-      "nix-collect-garbage"
+      # "nix-collect-garbage"
     ]
   }
 }
@@ -83,11 +83,11 @@ resource "google_compute_firewall" "default" {
 
   allow {
     protocol = "tcp"
-    ports = [22, 9411]
+    ports = [22, 7077, 8080]
   }
 }
 
 
-resource "google_compute_address" "gceip" {
-  name = "gceip-external"
+resource "google_compute_address" "gcespark" {
+  name = "gcespark-external"
 }

@@ -3,7 +3,7 @@
 To do the following operations, first have [Nix](https://nixos.org/nix) installed, and then run `nix-shell`.
 
 ### To deploy a new version:
-1. Download service account key [from the secret server](https://secret.emarsys.net/cred/detail/4215/), save it as `account.json` in the project root
+1. Download service account key, save it as account.json
 2. Run `terraform apply`
 
 ### To ssh into the host:
@@ -24,5 +24,12 @@ all the tools needed to deploy the system
 in our case terraform
 defined in shell.nix
 
-2.
-3.
+2. Infrastructure
+all the resources rented from GCP
+compute instances, network addresses etc.
+defined in *.tf
+
+3. Target environment
+all the software we run
+like spark, impala, etc.
+defined by templates/*.nix

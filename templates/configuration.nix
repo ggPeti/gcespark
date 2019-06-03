@@ -6,3 +6,5 @@
     /root/host.nix
   ];
 }
+
+# /etc/nixos/configuration.nix
