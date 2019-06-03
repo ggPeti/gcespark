@@ -2,7 +2,7 @@
 
 {pkgs ? import ./nixpkgs-pinned.nix {}, ...} :
 pkgs.stdenv.mkDerivation {
-  name = "rds-tactics-proxy-env";
+  name = "gcespark-env";
   buildInputs = [ (pkgs.terraform_0_12.withPlugins (p: [ p.google p.local p.null p.tls ])) ];
   GOOGLE_CREDENTIALS = if builtins.getEnv "GOOGLE_CREDENTIALS" == ""
                           then "account.json"

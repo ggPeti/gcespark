@@ -17,3 +17,12 @@ In the host, run the following: `journalctl -u haproxy`
 
 ### To check all running services:
 In the host, run the following: `systemctl -t service`
+
+
+1. Deployer environment
+all the tools needed to deploy the system
+in our case terraform
+defined in shell.nix
+
+2.
+3.
