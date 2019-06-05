@@ -1,5 +1,5 @@
-resource "google_compute_instance" "gcespark_master" {
-  name = "cristi-spark-gce-master"
+resource "google_compute_instance" "gcespark_slave" {
+  name = "cristi-spark-gce-slave"
   machine_type = "n1-standard-1"
   zone = "europe-west1-b"
 
@@ -12,9 +12,7 @@ resource "google_compute_instance" "gcespark_master" {
 
   network_interface {
     network = "default"
-    access_config {
-      nat_ip = "${google_compute_address.gcespark.address}"
-    }
+    access_config {}
   }
 
   metadata = {
@@ -37,20 +35,21 @@ resource "google_compute_instance" "gcespark_master" {
 }
 
 
-resource "null_resource" "gcespark_deploy_master" {
+resource "null_resource" "gcespark_deploy_slave" {
+  depends_on = [null_resource.gcespark_deploy_master]
   triggers = {
-    instance = "${google_compute_instance.gcespark_master.id}"
+    instance = "${google_compute_instance.gcespark_slave.id}"
     always  = "${uuid()}"
   }
 
   connection {
     user        = "root"
-    host        = "${local.instance_ip}"
+    host        = "${google_compute_instance.gcespark_slave.network_interface.0.access_config.0.nat_ip}"
     private_key = "${tls_private_key.root_key.private_key_pem}"
   }
 
   provisioner "file" {
-    content = templatefile("templates/master_host.nix", { master_ip = google_compute_instance.gcespark_master.network_interface.0.network_ip })
+    content = templatefile("templates/slave_host.nix", { master_ip = google_compute_instance.gcespark_master.network_interface.0.network_ip })
     destination = "/root/host.nix"
   }
 
@@ -70,9 +69,4 @@ resource "null_resource" "gcespark_deploy_master" {
       # "nix-collect-garbage"
     ]
   }
-}
-
-
-resource "google_compute_address" "gcespark" {
-  name = "gcespark-external"
 }
