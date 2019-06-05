@@ -1,5 +1,6 @@
 resource "google_compute_instance" "gcespark_slave" {
-  name = "cristi-spark-gce-slave"
+  count = 3
+  name = "cristi-spark-gce-slave-${count.index}"
   machine_type = "n1-standard-1"
   zone = "europe-west1-b"
 
@@ -36,15 +37,16 @@ resource "google_compute_instance" "gcespark_slave" {
 
 
 resource "null_resource" "gcespark_deploy_slave" {
+  count = 3
   depends_on = [null_resource.gcespark_deploy_master]
   triggers = {
-    instance = "${google_compute_instance.gcespark_slave.id}"
+    instance = "${google_compute_instance.gcespark_slave.*.id[count.index]}"
     always  = "${uuid()}"
   }
 
   connection {
     user        = "root"
-    host        = "${google_compute_instance.gcespark_slave.network_interface.0.access_config.0.nat_ip}"
+    host        = "${google_compute_instance.gcespark_slave.*.network_interface.0.access_config.0.nat_ip[count.index]}"
     private_key = "${tls_private_key.root_key.private_key_pem}"
   }
 
