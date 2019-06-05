@@ -68,6 +68,11 @@ resource "null_resource" "gcespark_deploy" {
     destination = "/etc/nixos/configuration.nix"
   }
 
+  provisioner "file" {
+    source = "nixpkgs-pinned.nix"
+    destination = "/root/nixpkgs-pinned.nix"
+  }
+
   provisioner "remote-exec" {
     inline = [
       "nixos-rebuild switch --show-trace",
@@ -78,7 +83,7 @@ resource "null_resource" "gcespark_deploy" {
 
 
 resource "google_compute_firewall" "default" {
-  name = "default-allow-ssh-and-zipkin"
+  name = "default-allow-ssh-and-spark"
   network = "default"
 
   allow {
