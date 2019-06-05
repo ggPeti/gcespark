@@ -59,7 +59,7 @@ resource "null_resource" "gcespark_deploy" {
   }
 
   provisioner "file" {
-    source = "templates/host.nix"
+    source = "templates/master_host.nix"
     destination = "/root/host.nix"
   }
 
