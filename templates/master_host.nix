@@ -4,7 +4,9 @@
 { config, pkgs, lib, ... } :
 
 {
-  networking.firewall.allowedTCPPorts = [ 22 7077 8080 ];
+  imports = [ ./hadoop_master.nix ];
+
+  networking.firewall.enable = false;
   programs.bash.enableCompletion = true;
 
   users.groups.spark = {};
@@ -25,5 +27,7 @@
       $${(import ./nixpkgs-pinned.nix {}).spark}/lib/spark-2.4.3-bin-without-hadoop/sbin/start-master.sh
     '';
   };
+
+  services.hadoopMaster.enable = true;
 
 }

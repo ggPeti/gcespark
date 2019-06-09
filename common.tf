@@ -36,16 +36,17 @@ resource "google_compute_firewall" "default" {
 
   allow {
     protocol = "tcp"
-    ports = [22, 7077, 8080]
+    ports = [22, 7077, 8042, 8044, 8080, 9000]
   }
 }
 
 
 locals {
-  instance_ip = "${google_compute_instance.gcespark_master.network_interface.0.access_config.0.nat_ip}"
+  public_ip = "${google_compute_instance.gcespark_master.network_interface.0.access_config.0.nat_ip}"
+  private_ip = "${google_compute_instance.gcespark_master.network_interface.0.network_ip}"
 }
 
 
 output "ip" {
-  value = "${local.instance_ip}"
+  value = "${local.public_ip}"
 }

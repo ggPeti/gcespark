@@ -45,12 +45,12 @@ resource "null_resource" "gcespark_deploy_master" {
 
   connection {
     user        = "root"
-    host        = "${local.instance_ip}"
+    host        = "${local.public_ip}"
     private_key = "${tls_private_key.root_key.private_key_pem}"
   }
 
   provisioner "file" {
-    content = templatefile("templates/master_host.nix", { master_ip = google_compute_instance.gcespark_master.network_interface.0.network_ip })
+    content = templatefile("templates/master_host.nix", { master_ip = local.private_ip })
     destination = "/root/host.nix"
   }
 
@@ -60,14 +60,19 @@ resource "null_resource" "gcespark_deploy_master" {
   }
 
   provisioner "file" {
+    content = templatefile("templates/hadoop_master.nix", { master_ip = local.private_ip })
+    destination = "/root/hadoop_master.nix"
+  }
+
+  provisioner "file" {
     source = "nixpkgs-pinned.nix"
     destination = "/root/nixpkgs-pinned.nix"
   }
 
   provisioner "remote-exec" {
     inline = [
-      "nixos-rebuild switch --show-trace",
-      # "nix-collect-garbage"
+      "nixos-rebuild switch",
+      "nix-collect-garbage -d"
     ]
   }
 }

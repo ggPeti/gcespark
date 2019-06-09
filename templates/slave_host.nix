@@ -4,7 +4,7 @@
 { config, pkgs, lib, ... } :
 
 {
-  networking.firewall.allowedTCPPorts = [ 22 7077 8080 ];
+  networking.firewall.enable = false;
   programs.bash.enableCompletion = true;
 
   users.groups.spark = {};
