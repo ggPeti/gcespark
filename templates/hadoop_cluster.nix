@@ -1,15 +1,18 @@
 { config, pkgs, lib, ... }:
-let cfg = config.services.hadoopMaster;
+let cfg = config.services.hadoopCluster;
 in
 with lib;
 {
-  options.services.hadoopMaster = {
+  options.services.hadoopCluster = {
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
-        Whether to run a Hadoop master node
-      '';
+      description = "Whether to run a Hadoop node";
+    };
+    
+    master = mkOption {
+      type = types.bool;
+      description = "Whether it is a master node";
     };
   };
 
@@ -29,11 +32,11 @@ with lib;
     };
 
     services.hadoop = { 
-      hdfs.namenode.enabled = true;
-      yarn.nodemanager.enabled = true;
-      yarn.resourcemanager.enabled = true;
+      hdfs.namenode.enabled = cfg.master;
+      yarn.nodemanager.enabled = cfg.master;
+      yarn.resourcemanager.enabled = cfg.master;
       coreSite = {
-        "fs.defaultFS" = "hdfs://localhost:9000";
+        "fs.defaultFS" = "hdfs://${master_ip}:9000";
         "yarn.scheduler.capacity.root.queues" = "default";
         "yarn.scheduler.capacity.root.default.capacity" = 100;
       }; 

@@ -51,13 +51,18 @@ resource "null_resource" "gcespark_deploy_slave" {
   }
 
   provisioner "file" {
-    content = templatefile("templates/slave_host.nix", { master_ip = google_compute_instance.gcespark_master.network_interface.0.network_ip })
+    content = templatefile("templates/slave_host.nix", { master_ip = local.private_ip })
     destination = "/root/host.nix"
   }
 
   provisioner "file" {
     source = "templates/configuration.nix"
     destination = "/etc/nixos/configuration.nix"
+  }
+
+  provisioner "file" {
+    content = templatefile("templates/hadoop_cluster.nix", { master_ip = local.private_ip })
+    destination = "/root/hadoop_cluster.nix"
   }
 
   provisioner "file" {

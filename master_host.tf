@@ -60,8 +60,8 @@ resource "null_resource" "gcespark_deploy_master" {
   }
 
   provisioner "file" {
-    content = templatefile("templates/hadoop_master.nix", { master_ip = local.private_ip })
-    destination = "/root/hadoop_master.nix"
+    content = templatefile("templates/hadoop_cluster.nix", { master_ip = local.private_ip })
+    destination = "/root/hadoop_cluster.nix"
   }
 
   provisioner "file" {

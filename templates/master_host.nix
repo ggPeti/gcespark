@@ -4,7 +4,7 @@
 { config, pkgs, lib, ... } :
 
 {
-  imports = [ ./hadoop_master.nix ];
+  imports = [ ./hadoop_cluster.nix ];
 
   networking.firewall.enable = false;
   programs.bash.enableCompletion = true;
@@ -28,6 +28,9 @@
     '';
   };
 
-  services.hadoopMaster.enable = true;
+  services.hadoopCluster = {
+    enable = true;
+    master = true;
+  };
 
 }

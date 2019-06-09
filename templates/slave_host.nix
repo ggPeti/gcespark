@@ -2,8 +2,9 @@
 # Provisioned by Terraform
 
 { config, pkgs, lib, ... } :
-
 {
+  imports = [ ./hadoop_cluster.nix ];
+
   networking.firewall.enable = false;
   programs.bash.enableCompletion = true;
 
@@ -25,6 +26,11 @@
       export SPARK_NO_DAEMONIZE=true
       $${(import ./nixpkgs-pinned.nix {}).spark}/lib/spark-2.4.3-bin-without-hadoop/sbin/start-slave.sh spark://${master_ip}:7077
     '';
+  };
+
+  services.hadoopCluster = {
+    enable = true;
+    master = false;
   };
 
 }
