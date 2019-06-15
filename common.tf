@@ -50,3 +50,27 @@ locals {
 output "ip" {
   value = "${local.public_ip}"
 }
+
+
+resource "google_compute_disk" "data_storage" {
+  name  = "test-disk-cristi"
+  type  = "pd-standard"
+  size  = 2
+  zone  = "europe-west1-b"
+  physical_block_size_bytes = 4096
+  
+  lifecycle {
+      prevent_destroy = false
+  }
+}
+
+resource "google_compute_attached_disk" "attach_data_storage" {
+  disk = "${google_compute_disk.data_storage.self_link}"
+  instance = "${google_compute_instance.gcespark_master.self_link}"
+  lifecycle {
+      prevent_destroy = false
+  }
+}
+
+//https://github.com/gregrahn/tpcds-kit
+//

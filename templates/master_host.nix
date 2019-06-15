@@ -7,7 +7,16 @@
   imports = [ ./hadoop_cluster.nix ];
 
   networking.firewall.enable = false;
+
+fileSystems."/data" = {
+    device = "/dev/sdb";
+    autoFormat = true;
+    fsType = "ext4";
+  };
+
   programs.bash.enableCompletion = true;
+
+  environment.systemPackages = [ (import /root/tpcds.nix { inherit pkgs; }) ];
 
   users.groups.spark = {};
   users.users.spark = {
@@ -33,4 +42,5 @@
     master = true;
   };
 
+  
 }

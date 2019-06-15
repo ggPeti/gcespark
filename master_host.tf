@@ -69,6 +69,11 @@ resource "null_resource" "gcespark_deploy_master" {
     destination = "/root/nixpkgs-pinned.nix"
   }
 
+  provisioner "file" {
+    source = "templates/tpcds.nix"
+    destination = "/root/tpcds.nix"
+  }
+
   provisioner "remote-exec" {
     inline = [
       "nixos-rebuild switch",
@@ -76,6 +81,7 @@ resource "null_resource" "gcespark_deploy_master" {
     ]
   }
 }
+
 
 
 resource "google_compute_address" "gcespark" {
