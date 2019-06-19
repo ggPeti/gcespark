@@ -77,13 +77,10 @@ resource "null_resource" "gcespark_deploy_master" {
   provisioner "remote-exec" {
     inline = [
       "nixos-rebuild switch",
-      "nix-collect-garbage -d"
+      "#nix-collect-garbage -d"
     ]
   }
 }
-
-
-
 resource "google_compute_address" "gcespark" {
   name = "gcespark-external"
 }
