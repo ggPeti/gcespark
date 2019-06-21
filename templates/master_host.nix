@@ -69,5 +69,7 @@ in
         schematool -dbType derby -initSchema || true
         hiveserver2
       '';
+      
     };
+    postFixup = ''wrapProgram $out/bin/hive --run "cd /home/hive/warehouse" '';
   }
