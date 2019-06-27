@@ -71,6 +71,3 @@ resource "google_compute_attached_disk" "attach_data_storage" {
       prevent_destroy = false
   }
 }
-
-//https://github.com/gregrahn/tpcds-kit
-//

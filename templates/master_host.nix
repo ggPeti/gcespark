@@ -22,7 +22,7 @@ in
 
     programs.bash.enableCompletion = true;
 
-    environment.systemPackages = [ (import /root/tpcds.nix { inherit pkgs; }) (import /root/hive.nix { inherit pkgs; }) pkgs.hadoop_3_1 hivepackage pkgs.tmate pkgs.vim ];
+    environment.systemPackages = [ (import /root/tpcds.nix { inherit pkgs; }) (import /root/hive.nix { stdenv = pkgs.stdenv; inherit hivepackage; makeWrapper = pkgs.makeWrapper; }) pkgs.hadoop_3_1 hivepackage pkgs.tmate pkgs.vim ];
 
     users.groups.spark = {};
     users.users.spark = {
