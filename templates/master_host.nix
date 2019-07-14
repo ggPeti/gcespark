@@ -8,6 +8,9 @@ let
     url = http://dk.mirrors.quenda.co/apache/hive/hive-3.1.1/apache-hive-3.1.1-bin.tar.gz;
     sha256 = "0j08v9lsh86m1i0wnk6mahkkggjhqijxz131bzi3agvqnvzkrcya";
   };
+  hadooppackage = pkgs.hadoop_3_1.overrideAttrs 
+    (oldAttrs: { installPhase = builtins.replaceStrings ["HADOOP_PREFIX"] ["HADOOP_HOME"] oldAttrs.installPhase; });
+  
 in 
   {
     imports = [ ./hadoop_cluster.nix ];
@@ -22,7 +25,7 @@ in
 
     programs.bash.enableCompletion = true;
 
-    environment.systemPackages = [ (import /root/tpcds.nix { inherit pkgs; }) (import /root/hive.nix { stdenv = pkgs.stdenv; inherit hivepackage; makeWrapper = pkgs.makeWrapper; }) pkgs.hadoop_3_1 hivepackage pkgs.tmate pkgs.vim ];
+    environment.systemPackages = [ (import /root/tpcds.nix { inherit pkgs; }) hivepackage hadooppackage pkgs.tmate pkgs.vim ];
 
     users.groups.spark = {};
     users.users.spark = {
@@ -63,13 +66,13 @@ in
         export HIVE_HOME=$${hivepackage}
         hadoop fs -mkdir -p /tmp
         hadoop fs -mkdir -p /home/hive/warehouse
-        hadoop fs -chmod g+w /tmp
-        hadoop fs -chmod g+w /home/hive/warehouse
+        hadoop fs -chmod a+rwx /tmp
+        hadoop fs -chmod a+rwx /home/hive/warehouse
         cd /home/hive/warehouse
         schematool -dbType derby -initSchema || true
         hiveserver2
       '';
-      
+      #"Hive: For clusters, MySQL or a similar relational database is required."
     };
     
   }

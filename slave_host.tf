@@ -7,7 +7,7 @@ resource "google_compute_instance" "gcespark_slave" {
   boot_disk {
     initialize_params {
       image = "${google_compute_image.nixos_1809.self_link}"
-      size = 10
+      size = 20
     }
   }
 

@@ -19,20 +19,21 @@ with lib;
   config = mkIf cfg.enable {
     users.groups.hadoop = {};
     users.users.hadoop = {
-        group = "hadoop";
-        createHome = true;
-        home = "/home/hadoop";
+      group = "hadoop";
+      createHome = true;
+      home = "/home/hadoop";
     };
 
     system.activationScripts = {
-        hadoopGroupRWX = {
+      hadoopGroupRWX = {
         text = "chmod -R g+rwx /home/hadoop";
         deps = [];
-        };
+      };
     };
 
-    services.hadoop = { 
+    services.hadoop = {
       hdfs.namenode.enabled = cfg.master;
+      hdfs.datanode.enabled = !cfg.master;
       yarn.nodemanager.enabled = cfg.master;
       yarn.resourcemanager.enabled = cfg.master;
       coreSite = {
@@ -46,7 +47,8 @@ with lib;
         "yarn.resourcemanager.hostname" = "${master_ip}";
         "yarn.nodemanager.log-dirs" = "/home/hadoop/logs/nodemanager";
       };
-      package = pkgs.hadoop_3_1;
+      #package = pkgs.hadoop_3_1;
+      package = pkgs.hadoop_3_1.overrideAttrs (oldAttrs: { installPhase = builtins.replaceStrings ["HADOOP_PREFIX"] ["HADOOP_HOME"] oldAttrs.installPhase; });
     };
   };
 }

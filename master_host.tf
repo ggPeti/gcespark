@@ -74,11 +74,6 @@ resource "null_resource" "gcespark_deploy_master" {
     destination = "/root/tpcds.nix"
   }
 
-   provisioner "file" {
-    source = "templates/hive.nix"
-    destination = "/root/hive.nix"
-  }
-
   provisioner "remote-exec" {
     inline = [
       "nixos-rebuild switch",
