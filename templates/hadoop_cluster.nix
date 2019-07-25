@@ -49,6 +49,7 @@ with lib;
       };
       #package = pkgs.hadoop_3_1;
       package = pkgs.hadoop_3_1.overrideAttrs (oldAttrs: { installPhase = builtins.replaceStrings ["HADOOP_PREFIX"] ["HADOOP_HOME"] oldAttrs.installPhase; });
+      
     };
   };
 }

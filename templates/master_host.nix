@@ -67,12 +67,15 @@ in
         hadoop fs -mkdir -p /tmp
         hadoop fs -mkdir -p /home/hive/warehouse
         hadoop fs -chmod a+rwx /tmp
+        hadoop fs -chmod a+rwx /tmp/hive
         hadoop fs -chmod a+rwx /home/hive/warehouse
         cd /home/hive/warehouse
         schematool -dbType derby -initSchema || true
         hiveserver2
       '';
       #"Hive: For clusters, MySQL or a similar relational database is required."
+      #for some reason schematool does not run?
+      #schematool -initSchema -dbType derby || true
     };
     
   }
