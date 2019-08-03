@@ -76,6 +76,7 @@ in
       #"Hive: For clusters, MySQL or a similar relational database is required."
       #for some reason schematool does not run?
       #schematool -initSchema -dbType derby || true
+      #hive EXTERNAL to read
     };
     
   }

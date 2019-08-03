@@ -55,7 +55,7 @@ output "ip" {
 resource "google_compute_disk" "data_storage" {
   name  = "test-disk-cristi"
   type  = "pd-standard"
-  size  = 5
+  size  = 3
   zone  = "europe-west1-b"
   physical_block_size_bytes = 4096
   
