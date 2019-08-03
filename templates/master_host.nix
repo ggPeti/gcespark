@@ -77,6 +77,7 @@ in
       #for some reason schematool does not run?
       #schematool -initSchema -dbType derby || true
       #hive EXTERNAL to read
+      #reee
     };
     
   }
