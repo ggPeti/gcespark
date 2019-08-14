@@ -1,13 +1,13 @@
 resource "google_compute_instance" "gcespark_slave" {
   count = 3
   name = "cristi-spark-gce-slave-${count.index}"
-  machine_type = "n1-standard-1"
+  machine_type = "n1-standard-2"
   zone = "europe-west1-b"
 
   boot_disk {
     initialize_params {
       image = "${google_compute_image.nixos_1809.self_link}"
-      size = 20
+      size = 30
     }
   }
 

@@ -1,12 +1,12 @@
 resource "google_compute_instance" "gcespark_master" {
   name = "cristi-spark-gce-master"
-  machine_type = "n1-standard-1"
+  machine_type = "n1-standard-2"
   zone = "europe-west1-b"
 
   boot_disk {
     initialize_params {
       image = "${google_compute_image.nixos_1809.self_link}"
-      size = 10
+      size = 40
     }
   }
 
