@@ -10,7 +10,7 @@ let
   tcpds = import ../packages/tpcds.nix { inherit pkgs; };
 in
 {
-  imports = [ ./node.nix ];
+  imports = [ ./common.nix ];
 
   fileSystems."/data" = {
     device = "/dev/sdb";
@@ -24,6 +24,13 @@ in
     pkgs.tmate
     pkgs.vim
   ];
+
+  environment.etc."hadoop/workers" = {
+    enable = true;
+    text = ''
+      ${lib.concatStringsSep "\n" config.services.hadoopCluster.slave_ips}
+    '';
+  };
 
   users.groups.hive = {};
   users.users.hive = {

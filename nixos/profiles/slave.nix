@@ -5,7 +5,7 @@ let
   spark = (import ../nixpkgs-pinned.nix {}).spark;
 in
 {
-  imports = [ ./node.nix ];
+  imports = [ ./common.nix ];
 
   services.hadoopCluster.master = false;
 
