@@ -2,7 +2,7 @@
 
 variable "env" {
   description = "Usually your name. Deployment environment name, used to prefix resource names. You can deploy more than one network to the same account by using different values for env."
-  default = "dev"
+  default     = "dev"
 }
 
 provider "google" {
@@ -70,13 +70,13 @@ data "template_file" "configuration_json" {
 EOF
 }
 
-locals  {
+locals {
   public_ip = google_compute_instance.master.network_interface.0.access_config.0.nat_ip
 }
 
 resource "local_file" "public_ip" {
   filename = "${path.module}/OUTPUT_public_ip"
-  content  = local.public_ip
+  content = local.public_ip
 }
 
 output "public_ip" {

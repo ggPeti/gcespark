@@ -1,12 +1,12 @@
 resource "google_compute_instance" "master" {
-  name = "${var.env}-gcespark-master"
+  name         = "${var.env}-gcespark-master"
   machine_type = "n1-standard-2"
-  zone = "europe-west1-b"
+  zone         = "europe-west1-b"
 
   boot_disk {
     initialize_params {
       image = google_compute_image.nixos_1809.self_link
-      size = 40
+      size  = 40
     }
   }
 
@@ -41,7 +41,7 @@ resource "null_resource" "deploy_master" {
   count = 1
   triggers = {
     instance = google_compute_instance.master.id
-    always  = uuid()
+    always   = uuid()
   }
 
   connection {
@@ -56,12 +56,12 @@ resource "null_resource" "deploy_master" {
   }
 
   provisioner "file" {
-    content      = "{ imports = [ profiles/master.nix ]; }"
+    content     = "{ imports = [ profiles/master.nix ]; }"
     destination = "/etc/nixos/configuration.nix"
   }
 
   provisioner "file" {
-    content = data.template_file.configuration_json.rendered
+    content     = data.template_file.configuration_json.rendered
     destination = "/etc/nixos/configuration.json"
   }
 

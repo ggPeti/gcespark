@@ -6,7 +6,7 @@ resource "google_compute_instance" "slave" {
 
   boot_disk {
     initialize_params {
-      image = "${google_compute_image.nixos_1809.self_link}"
+      image = google_compute_image.nixos_1809.self_link
       size  = 30
     }
   }
@@ -22,8 +22,8 @@ resource "google_compute_instance" "slave" {
 
   connection {
     user        = "root"
-    host        = "${self.network_interface.0.access_config.0.nat_ip}"
-    private_key = "${tls_private_key.root_key.private_key_pem}"
+    host        = self.network_interface.0.access_config.0.nat_ip
+    private_key = tls_private_key.root_key.private_key_pem
   }
 
   provisioner "remote-exec" {
@@ -56,12 +56,12 @@ resource "null_resource" "deploy_slave" {
   }
 
   provisioner "file" {
-    content      = "{ imports = [ ./profiles/slave.nix ]; }"
+    content     = "{ imports = [ ./profiles/slave.nix ]; }"
     destination = "/etc/nixos/configuration.nix"
   }
 
   provisioner "file" {
-    content = data.template_file.configuration_json.rendered
+    content     = data.template_file.configuration_json.rendered
     destination = "/etc/nixos/configuration.json"
   }
 
