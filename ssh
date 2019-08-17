@@ -1,0 +1,2 @@
+#!/bin/sh
+ssh -o StrictHostKeyChecking=accept-new root@$(cat OUTPUT_public_ip) -i SECRET_private_key
