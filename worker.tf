@@ -1,6 +1,6 @@
-resource "google_compute_instance" "slave" {
+resource "google_compute_instance" "worker" {
   count        = 1
-  name         = "${var.env}-gcespark-slave-${count.index}"
+  name         = "${var.env}-gcespark-worker-${count.index}"
   machine_type = "n1-standard-2"
   zone         = "europe-west1-b"
 
@@ -36,17 +36,17 @@ resource "google_compute_instance" "slave" {
 }
 
 
-resource "null_resource" "deploy_slave" {
+resource "null_resource" "deploy_worker" {
   count      = 1
   depends_on = [null_resource.deploy_master]
   triggers = {
-    instance = google_compute_instance.slave.*.id[count.index]
+    instance = google_compute_instance.worker.*.id[count.index]
     always   = uuid()
   }
 
   connection {
     user        = "root"
-    host        = google_compute_instance.slave.*.network_interface.0.access_config.0.nat_ip[count.index]
+    host        = google_compute_instance.worker.*.network_interface.0.access_config.0.nat_ip[count.index]
     private_key = tls_private_key.root_key.private_key_pem
   }
 
@@ -56,7 +56,7 @@ resource "null_resource" "deploy_slave" {
   }
 
   provisioner "file" {
-    content     = "{ imports = [ ./profiles/slave.nix ]; }"
+    content     = "{ imports = [ ./profiles/worker.nix ]; }"
     destination = "/etc/nixos/configuration.nix"
   }
 

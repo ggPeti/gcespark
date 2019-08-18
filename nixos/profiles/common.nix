@@ -1,4 +1,4 @@
-# NixOS profile for common parts of master and slave nodes
+# NixOS profile for common parts of master and worker nodes
 { config, pkgs, lib, ...}:
 let
   configurationJson =
@@ -27,7 +27,7 @@ in{
     services.hadoopCluster = {
       enable = true;
       master_ip = configurationJson.master_ip;
-      slave_ips = configurationJson.slave_ips;
+      worker_ips = configurationJson.worker_ips;
     };
   };
 }

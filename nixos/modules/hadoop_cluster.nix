@@ -15,10 +15,10 @@ in {
       description = "IP address of master node";
     };
 
-    slave_ips = lib.mkOption {
+    worker_ips = lib.mkOption {
       type = listOf string;
-      default = "";
-      description = "List of IP addresses of slave nodes";
+      default = [];
+      description = "List of IP addresses of worker nodes";
     };
   };
 
@@ -77,8 +77,7 @@ in {
       mapredSite = {
         "mapreduce.framework.name" = "yarn";
       };
-      package = pkgs.hadoop_3_1.overrideAttrs
-        (oldAttrs: { installPhase = builtins.replaceStrings ["HADOOP_PREFIX"] ["HADOOP_HOME"] oldAttrs.installPhase; });
+      package = import ../packages/hadoop.nix { inherit pkgs; inherit (cfg) worker_ips; };
     };
   };
 }

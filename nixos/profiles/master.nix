@@ -25,13 +25,6 @@ in
     pkgs.vim
   ];
 
-  environment.etc."hadoop/workers" = {
-    enable = true;
-    text = ''
-      ${lib.concatStringsSep "\n" config.services.hadoopCluster.slave_ips}
-    '';
-  };
-
   users.groups.hive = {};
   users.users.hive = {
     group = "hive";

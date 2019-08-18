@@ -1,4 +1,4 @@
-# NixOS profile for gcespark slave nodes
+# NixOS profile for gcespark worker nodes
 { config, pkgs, lib, ... } :
 let
   master_ip = config.services.hadoopCluster.master_ip;
@@ -9,7 +9,7 @@ in
 
   services.hadoopCluster.master = false;
 
-  systemd.services.spark-slave = {
+  systemd.services.spark-worker = {
     wantedBy = [ "multi-user.target" ];
     serviceConfig.User = "spark";
     path = [ pkgs.procps ];

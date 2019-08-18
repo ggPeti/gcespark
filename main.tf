@@ -65,7 +65,7 @@ data "template_file" "configuration_json" {
   template = <<EOF
 {
   "master_ip": "${google_compute_instance.master.network_interface.0.network_ip}",
-  "slave_ips": ${jsonencode(google_compute_instance.slave.*.network_interface.0.network_ip)}
+  "worker_ips": ${jsonencode(google_compute_instance.worker.*.network_interface.0.network_ip)}
 }
 EOF
 }
