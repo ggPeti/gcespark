@@ -12,8 +12,17 @@ in{
     ../modules/hadoop_cluster.nix
   ];
   config = {
-
+    
+    
+    #hosts = builtins.listToAttrs (imap0 (i: x: {name="worker"+builtins.toString i; value=x;}) worker_ips) // {master="${master_ip}";};
+    
     networking.firewall.enable = false;
+    networking.hosts = 
+      builtins.listToAttrs (lib.imap0 (i: x: {
+        name=x; 
+        value=[("worker" + builtins.toString i)];
+        }) configurationJson.worker_ips) // {"${configurationJson.master_ip}" = ["master"]; };
+    
 
     programs.bash.enableCompletion = true;
 
@@ -29,5 +38,6 @@ in{
       master_ip = configurationJson.master_ip;
       worker_ips = configurationJson.worker_ips;
     };
+    
   };
 }

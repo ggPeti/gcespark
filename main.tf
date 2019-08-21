@@ -18,9 +18,7 @@ resource "local_file" "private_key" {
   filename = "${path.module}/SECRET_private_key"
   content  = tls_private_key.root_key.private_key_pem
 
-  provisioner "local-exec" {
-    command = "chmod 600 ${path.module}/SECRET_private_key"
-  }
+  
 }
 
 resource "google_compute_image" "nixos_1809" {

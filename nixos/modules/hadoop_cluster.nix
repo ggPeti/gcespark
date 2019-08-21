@@ -50,29 +50,26 @@ in {
 
       coreSite = {
         "fs.defaultFS" = "hdfs://${cfg.master_ip}:9000";
-        "yarn.scheduler.capacity.root.queues" = "default";
-        "yarn.scheduler.capacity.root.default.capacity" = 100;
-      };
+         };
       hdfsSite = {
         "dfs.namenode.name.dir" = "${config.users.users.hadoop.home}/data/nameNode";
         "dfs.datanode.data.dir" = "${config.users.users.hadoop.home}/data/dataNode";
+        "dfs.namenode.checkpoint.dir" = "${config.users.users.hadoop.home}/data/namesecondary";
         "dfs.replication" = 1;
       };
-      /*
-      yarnDefault = {
-        "yarn.resourcemanager.address" = "${cfg.master_ip}:8032";
-      };
-      */
+      
       yarnSite = {
-        #"yarn.nodemanager.hostname" = "${cfg.master_ip}";
-        #"yarn.nodemanager.address" = "${cfg.master_ip}:0";
-
-        #"yarn.resourcemanager.hostname" = "${cfg.master_ip}";
-        #"yarn.resourcemanager.address" = "${cfg.master_ip}:8032";
-
-        "yarn.resourcemanager.scheduler.address" = "${cfg.master_ip}:8030";
-        "yarn.nodemanager.log-dirs" = "${config.users.users.hadoop.home}/logs/nodemanager";
+        #"yarn.resourcemanager.resource-tracker.address" = "${cfg.master_ip}:8025";
+        #"yarn.resourcemanager.scheduler.address" = "${cfg.master_ip}:8030";
+        "yarn.resourcemanager.address" = "${cfg.master_ip}:8032";
+        "yarn.resourcemanager.hostname" = "${cfg.master_ip}";
+        "yarn.nodemanager.resource.memory-mb" = 6144;
+        "yarn.nodemanager.resource.cpu-vcores" = 2;
+        "yarn.nodemanager.local-dirs" = "${config.users.users.hadoop.home}/data/nm-local-dir";
+        #"yarn.resourcemanager.scheduler.address" = "${cfg.master_ip}:8030";
+        #"yarn.nodemanager.log-dirs" = "${config.users.users.hadoop.home}/logs/nodemanager";
         "yarn.nodemanager.aux-services" = "mapreduce_shuffle";
+      
       };
       mapredSite = {
         "mapreduce.framework.name" = "yarn";
