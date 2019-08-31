@@ -37,6 +37,14 @@ in {
         text = "chmod -R g+rwx ${config.users.users.hadoop.home}";
         deps = [];
       };
+      createDirs = {
+        text = "mkdir -p ${config.users.users.hadoop.home}/data/{nameNode,dataNode,namesecondary}";
+        deps = [];
+      };
+      tmpRWX = {
+        text = "mkdir -p /tmp/hive && chmod -R a+rwx /tmp/hive";
+        deps = [];
+      };
     };
 
     #systemd.services.hdfs-namenode.serviceConfig.Type = "simple";
@@ -50,8 +58,10 @@ in {
 
       coreSite = {
         "fs.defaultFS" = "hdfs://${cfg.master_ip}:9000";
-         };
+      };
+
       hdfsSite = {
+        "dfs.permissions.enabled" = "false";
         "dfs.namenode.name.dir" = "${config.users.users.hadoop.home}/data/nameNode";
         "dfs.datanode.data.dir" = "${config.users.users.hadoop.home}/data/dataNode";
         "dfs.namenode.checkpoint.dir" = "${config.users.users.hadoop.home}/data/namesecondary";
@@ -59,8 +69,11 @@ in {
       };
       
       yarnSite = {
+        "yarn.scheduler.configuration.store.class" = "file";
+        "yarn.scheduler.capacity.root.queues" = "default";
+        "yarn.scheduler.capacity.root.default.capacity" = 100;
         #"yarn.resourcemanager.resource-tracker.address" = "${cfg.master_ip}:8025";
-        #"yarn.resourcemanager.scheduler.address" = "${cfg.master_ip}:8030";
+        "yarn.resourcemanager.scheduler.address" = "${cfg.master_ip}:8030";
         "yarn.resourcemanager.address" = "${cfg.master_ip}:8032";
         "yarn.resourcemanager.hostname" = "${cfg.master_ip}";
         "yarn.nodemanager.resource.memory-mb" = 6144;

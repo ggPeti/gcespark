@@ -12,10 +12,6 @@ in{
     ../modules/hadoop_cluster.nix
   ];
   config = {
-    
-    
-    #hosts = builtins.listToAttrs (imap0 (i: x: {name="worker"+builtins.toString i; value=x;}) worker_ips) // {master="${master_ip}";};
-    
     networking.firewall.enable = false;
     networking.hosts = 
       builtins.listToAttrs (lib.imap0 (i: x: {
