@@ -1,5 +1,5 @@
 resource "google_compute_instance" "worker" {
-  count        = 1
+  count        = 2
   name         = "${var.env}-gcespark-worker-${count.index}"
   machine_type = "n1-standard-2"
   zone         = "europe-west1-b"
@@ -37,7 +37,7 @@ resource "google_compute_instance" "worker" {
 
 
 resource "null_resource" "deploy_worker" {
-  count      = 1
+  count      = 2
   depends_on = [null_resource.deploy_master]
   triggers = {
     instance = google_compute_instance.worker.*.id[count.index]

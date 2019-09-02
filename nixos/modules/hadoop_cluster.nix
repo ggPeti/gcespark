@@ -37,10 +37,7 @@ in {
         text = "chmod -R g+rwx ${config.users.users.hadoop.home}";
         deps = [];
       };
-      createDirs = {
-        text = "mkdir -p ${config.users.users.hadoop.home}/data/{nameNode,dataNode,namesecondary}";
-        deps = [];
-      };
+      
       tmpRWX = {
         text = "mkdir -p /tmp/hive && chmod -R a+rwx /tmp/hive";
         deps = [];
